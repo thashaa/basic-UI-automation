@@ -162,12 +162,12 @@ describe("E2E Flow", function(){
 
         });
 
-        afterEach(function () {
+       /* afterEach(function () {
         cy.screenshot(Cypress.currentTest.title);
-        });
+        });*/
     });
 
-    describe.only("Add Leave Balance for New Employee Flow", function(){
+    describe("Add Leave Balance for New Employee Flow", function(){
         it("Success Login as Admin", function(){
             //visit the website
             cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
@@ -207,7 +207,7 @@ describe("E2E Flow", function(){
             cy.xpath('//div[@role="listbox"]//span[text()="CAN - Vacation"]').click();
             //choose the leave period
             cy.xpath('//label[text()="Leave Period"]/following::div[contains(@class, "oxd-select-text-input")][1]').click();
-            cy.xpath('//div[@role="listbox"]//span[text()="2025-01-01 - 2026-27-01"]').click();
+            cy.xpath('//div[@role="listbox"]//span[text()="2025-01-01 - 2025-31-12"]').click();
             //input the amount of entitlement days
             cy.xpath('//label[text()="Entitlement"]/following::input[1]').type("12");
             //click save
@@ -254,9 +254,9 @@ describe("E2E Flow", function(){
             cy.contains('span.oxd-input-field-error-message', 'Invalid');
             
         });
-        afterEach(function () {
+       /* afterEach(function () {
         cy.screenshot(Cypress.currentTest.title);
-        });
+        });*/
 
     });
 })
