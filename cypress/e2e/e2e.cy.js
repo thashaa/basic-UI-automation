@@ -1,5 +1,5 @@
 describe("E2E Flow", function(){
-    describe("Add New Employee Flow", async function(){
+    describe("Add New Employee Flow", function(){
         it("Success Login", function(){
             //visit the website
             cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
@@ -164,6 +164,99 @@ describe("E2E Flow", function(){
 
         afterEach(function () {
         cy.screenshot(Cypress.currentTest.title);
-  });
-    })
+        });
+    });
+
+    describe.only("Add Leave Balance for New Employee Flow", function(){
+        it("Success Login as Admin", function(){
+            //visit the website
+            cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
+            cy.wait(3000);
+            //login as admin
+            cy.get('input[placeholder="Username"]').type("Admin");
+            cy.get('input[placeholder="Password"]').type("admin123");
+            cy.get('button[type="submit"]').contains("Login").click();
+            //assert it navigate to dashboard 
+            cy.url().should('eq', 'https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index')
+            cy.contains("h6", "Dashboard");
+        });
+        it("Success Add Leave Balance for New Employee", function(){
+            //visit the website
+            cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
+            cy.wait(3000);
+            //login as admin
+            cy.get('input[placeholder="Username"]').type("Admin");
+            cy.get('input[placeholder="Password"]').type("admin123");
+            cy.get('button[type="submit"]').contains("Login").click();
+            cy.url().should("eq", "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index")
+            cy.contains("h6", "Dashboard");
+            //go to add leave balance page
+            cy.get(".oxd-sidepanel-body").contains("Leave").click();
+            cy.contains("h6", "Leave");
+            cy.contains("li", "Entitlements").click();
+            cy.get(".oxd-dropdown-menu").contains("Add Entitlements").click();
+            cy.url().should("eq", "https://opensource-demo.orangehrmlive.com/web/index.php/leave/addLeaveEntitlement");
+            cy.get(".orangehrm-card-container").contains("Add Leave Entitlement");
+            //add leave balance for individual record
+            cy.get('input[type="radio"][value="0"]').should('be.checked');
+            //fill the employee name
+            cy.get('input[placeholder="Type for hints..."]').type("ruby");
+            cy.get('.oxd-autocomplete-dropdown').contains('ruby chan').click();
+            //choose the leave type
+            cy.xpath('//label[text()="Leave Type"]/following::div[contains(@class, "oxd-select-text-input")][1]').click();
+            cy.xpath('//div[@role="listbox"]//span[text()="CAN - Vacation"]').click();
+            //choose the leave period
+            cy.xpath('//label[text()="Leave Period"]/following::div[contains(@class, "oxd-select-text-input")][1]').click();
+            cy.xpath('//div[@role="listbox"]//span[text()="2025-01-01 - 2026-27-01"]').click();
+            //input the amount of entitlement days
+            cy.xpath('//label[text()="Entitlement"]/following::input[1]').type("12");
+            //click save
+            cy.get('button[type="submit"]').contains("Save").click()
+            //assert the pop up dialog is appear
+            cy.get(".oxd-dialog-container-default--inner").should("be.visible")
+            //confirm the pop up dialog
+            cy.get('button[type= "button"]').contains("Confirm").click();
+            //assert the success toaster is visible
+            cy.get("#oxd-toaster_1").should('be.visible');
+        });
+        it("Add Leave Balance for Un-existed Employee", function(){
+            //visit the website
+            cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
+            cy.wait(3000);
+            //login as admin
+            cy.get('input[placeholder="Username"]').type("Admin");
+            cy.get('input[placeholder="Password"]').type("admin123");
+            cy.get('button[type="submit"]').contains("Login").click();
+            cy.url().should("eq", "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index")
+            cy.contains("h6", "Dashboard");
+            //go to add leave balance page
+            cy.get(".oxd-sidepanel-body").contains("Leave").click();
+            cy.contains("h6", "Leave");
+            cy.contains("li", "Entitlements").click();
+            cy.get(".oxd-dropdown-menu").contains("Add Entitlements").click();
+            cy.url().should("eq", "https://opensource-demo.orangehrmlive.com/web/index.php/leave/addLeaveEntitlement");
+            cy.get(".orangehrm-card-container").contains("Add Leave Entitlement");
+            //add leave balance for individual record
+            cy.get('input[type="radio"][value="0"]').should('be.checked');
+            //fill the employee name
+            cy.get('input[placeholder="Type for hints..."]').type("subyy");
+            //choose the leave type
+            cy.xpath('//label[text()="Leave Type"]/following::div[contains(@class, "oxd-select-text-input")][1]').click();
+            cy.xpath('//div[@role="listbox"]//span[text()="CAN - Vacation"]').click();
+            //choose the leave period
+            cy.xpath('//label[text()="Leave Period"]/following::div[contains(@class, "oxd-select-text-input")][1]').click();
+            cy.xpath('//div[@role="listbox"]//span[text()="2025-01-01 - 2026-27-01"]').click();
+            //input the amount of entitlement days
+            cy.xpath('//label[text()="Entitlement"]/following::input[1]').type("12");
+            //click save
+            cy.get('button[type="submit"]').contains("Save").click()
+             //assert the error message below employee name field
+            cy.contains('span.oxd-input-field-error-message', 'Invalid');
+            
+        });
+        afterEach(function () {
+        cy.screenshot(Cypress.currentTest.title);
+        });
+
+    });
 })
