@@ -12,11 +12,11 @@ describe("Request and Approve", function(){
             cy.url().should('eq', 'https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index');
             cy.get(".oxd-userdropdown-name").contains("ruby chan");
         });
-        it.only("Employee is Requesting Day Leave", function(){
+        it("Employee is Requesting Day Leave", function(){
             //visit the website
             cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
             cy.wait(3000);
-            //login as admin
+            //login as employee
             cy.get('input[placeholder="Username"]').type("rubychan");
             cy.get('input[placeholder="Password"]').type("ruby123");
             cy.get('button[type="submit"]').contains("Login").click();
@@ -40,7 +40,7 @@ describe("Request and Approve", function(){
             cy.xpath(`//ul[@class='oxd-calendar-selector']//li[@class='oxd-calendar-selector-month']`).click();
             cy.xpath(`//*[@class='oxd-calendar-dropdown']/*[contains(.,'May')]`).click();
             //select date
-            cy.xpath(`//div[@class='oxd-calendar-date' and contains(.,'26')]`).click();
+            cy.xpath(`//div[@class='oxd-calendar-date' and contains(.,'28')]`).click();
             cy.wait(2000)
             //select the end date
             cy.xpath(`//div[@data-v-c93bdbf3 and contains(.,'To Date')]//input`).click();
@@ -48,30 +48,47 @@ describe("Request and Approve", function(){
             cy.xpath(`//ul[@class='oxd-calendar-selector']//li[@class='oxd-calendar-selector-month']`).click();
             cy.xpath(`//*[@class='oxd-calendar-dropdown']/*[contains(.,'May')]`).click();
             //select date
-            cy.xpath(`//div[@class='oxd-calendar-date' and contains(.,'27')]`).click();
+            cy.xpath(`//div[@class='oxd-calendar-date' and contains(.,'29')]`).click();
 
             // add comments 
-            cy.xpath(`//div[@data-v-c93bdbf3 and contains(.,'Comments')]//input`).type("short vacation");
+            cy.xpath(`//div[@data-v-957b4417]//textarea`).type("short vacation");
             //click apply 
             cy.get('button[type = "submit"]').contains("Apply").click();
-            
+            cy.wait(3000)
+            cy.get("#oxd-toaster_1").contains("Success").should('be.visible');
         });
+        it("Admin Check and Approve the Request", function(){
+             //visit the website
+            cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
+            cy.wait(3000);
+            //login as admin
+            cy.get('input[placeholder="Username"]').type("Admin");
+            cy.get('input[placeholder="Password"]').type("admin123");
+            cy.get('button[type="submit"]').contains("Login").click();
+            //assert it navigate to dashboard 
+            cy.url().should('eq', 'https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index')
+            cy.contains("h6", "Dashboard");
+
+            //navigate to leave page 
+            cy.get(".oxd-sidepanel-body").contains("Leave").click();
+            cy.contains("h6", "Leave");
+            cy.url().should("eq", "https://opensource-demo.orangehrmlive.com/web/index.php/leave/viewLeaveList");
+
+            //search by name 
+            cy.xpath(`//div[@data-v-c93bdbf3 and contains(.,'Employee Name')]//input`).type("ruby");
+            cy.get('.oxd-autocomplete-dropdown').contains('ruby chan').click()
+            cy.get('button[type="submit"]').contains("Search").click();
+
+           //assert record is shown
+            cy.xpath('//div[@class="oxd-table-body"]//div[@class="oxd-table-row oxd-table-row--with-border"][1]/div[3]')
+            .contains('ruby chan');
+
+            
+            cy.xpath('//button[@data-v-c423d1fa and contains(., "Approve")]').click()
+            cy.wait(3000)
+            cy.get("#oxd-toaster_1").contains("Success").should('be.visible');
+
+        })
     })
 })
 
-/*
-cy.get('.oxd-date-input-icon').first().click();
-            cy.get(".oxd-date-input-calendar").should("be.visible");
-            cy.xpath(`//ul[@class='oxd-calendar-selector']//li[@class='oxd-calendar-selector-month']`).click();
-            cy.xpath(`//*[@class='oxd-calendar-dropdown']/*[contains(.,'May')]`).click();
-            //select date
-            cy.xpath(`//div[@class='oxd-calendar-date' and contains(.,'26')]`).click();
-            cy.wait(2000)
-            //select the end date
-            cy.xpath('//label[text()="To Date"]/ancestor::div[contains(@class, "oxd-input-group")]//input').click();
-            cy.get(".oxd-date-input-calendar").should("be.visible");
-            cy.xpath(`//ul[@class='oxd-calendar-selector']//li[@class='oxd-calendar-selector-month']`).click();
-            cy.xpath(`//*[@class='oxd-calendar-dropdown']/*[contains(.,'May')]`).click();
-            //select date
-            cy.xpath(`//div[@class='oxd-calendar-date' and contains(.,'27')]`).click();
-            */

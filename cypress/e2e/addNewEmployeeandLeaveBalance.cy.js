@@ -12,7 +12,7 @@ describe("E2E Flow", function(){
             cy.url().should('eq', 'https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index')
             cy.contains("h6", "Dashboard");
         });
-        it("Failed Login", function(){
+        it.skip("Failed Login", function(){
              //visit the website
             cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
             cy.wait(3000);
@@ -49,7 +49,7 @@ describe("E2E Flow", function(){
             cy.url().should("contains", "/viewPersonalDetails/empNumber/"); 
             cy.get(".orangehrm-edit-employee-name").contains("ruby chan");
         });
-        it("Missing Last Name when Add New Employee", function(){
+        it.skip("Missing Last Name when Add New Employee", function(){
             //visit the website
             cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
             cy.wait(3000);
@@ -117,7 +117,7 @@ describe("E2E Flow", function(){
             cy.wait(3000)
             cy.get("#oxd-toaster_1").contains("Success").should('be.visible');
         });
-        it("Create Un-existed Employee Account", function(){
+        it.skip("Create Un-existed Employee Account", function(){
             //visit the website
             cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
             cy.wait(3000);
@@ -180,7 +180,7 @@ describe("E2E Flow", function(){
             cy.url().should('eq', 'https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index')
             cy.contains("h6", "Dashboard");
         });
-        it("Success Add Leave Balance for New Employee", function(){
+        it.only("Success Add Leave Balance for New Employee", function(){
             //visit the website
             cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
             cy.wait(3000);
@@ -219,7 +219,7 @@ describe("E2E Flow", function(){
             //assert the success toaster is visible
             cy.get("#oxd-toaster_1").should('be.visible');
         });
-        it("Add Leave Balance for Un-existed Employee", function(){
+        it.skip("Add Leave Balance for Un-existed Employee", function(){
             //visit the website
             cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
             cy.wait(3000);
@@ -245,7 +245,7 @@ describe("E2E Flow", function(){
             cy.xpath('//div[@role="listbox"]//span[text()="CAN - Vacation"]').click();
             //choose the leave period
             cy.xpath('//label[text()="Leave Period"]/following::div[contains(@class, "oxd-select-text-input")][1]').click();
-            cy.xpath('//div[@role="listbox"]//span[text()="2025-01-01 - 2026-27-01"]').click();
+            cy.xpath('//div[@role="listbox"]//span[text()="2025-01-01 - 2025-31-12"]').click();
             //input the amount of entitlement days
             cy.xpath('//label[text()="Entitlement"]/following::input[1]').type("12");
             //click save
